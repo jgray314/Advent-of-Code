@@ -22,5 +22,5 @@ def part2(input):
 	return compare_idx_rot(input, rot)
 	
 input = read()
-print("Part 1: {}".format(part1(input)))
-print("Part 2: {}".format(part2(input)))
+print("Part 1: {}".format(part1(input)))  # 1174
+print("Part 2: {}".format(part2(input)))  # 1166
