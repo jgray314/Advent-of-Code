@@ -1,0 +1,38 @@
+import sys
+from collections import defaultdict
+
+def read():
+	input = {}
+	for line in sys.stdin:
+		ca = line.split(" ")
+		id = int(ca[0][1:])
+		xy = ca[2][:-1].split(",")
+		wh = ca[3][:-1].split("x")
+		data = {
+			'x': int(xy[0]),
+			'y': int(xy[1]),
+			'width': int(wh[0]),
+			'height':  int(wh[1])
+		}
+		input[id] = data
+	print("Read {} entries".format(len(input)))
+	return input
+
+def idx(x, y):
+	return x * 1000 + y
+
+def part1(input):
+	fabric = defaultdict(list)
+	for k, v in input.items():
+		for dx in range(v['width']):
+			for dy in range(v['height']):
+				fabric[idx(v['x']+dx, v['y']+dy)].append(k)
+	#print(fabric)
+	sum = 0
+	for k, v in fabric.items():
+		if len(v) > 1:
+			sum += 1
+	return sum
+
+input = read()
+print("Part 1: {}".format(part1(input)))
