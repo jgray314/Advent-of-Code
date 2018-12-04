@@ -58,7 +58,6 @@ def sleeps_totals(sleeps):
 def part1(input):
 	sleeps = guard_sleeps(input)
 	totals = sleeps_totals(sleeps)
-	print(totals)
 	
 	lazy_g = 0
 	for k, v in totals.items():
@@ -86,12 +85,27 @@ def hist_sleep_odds(input):
 	for k, v in input.items():
 		if type(v) is int:
 			guard_duty[v] += 1
-
+	print(guard_duty)
 	guard_odds = {}
 	for k, v in sleeps.items():
 		guard_odds[k] = v / guard_duty[key_guard(k)]
 	return guard_odds
 
+def part2(input):
+	sleeps = guard_sleeps(input)
+
+	mk = ""
+	mv = 0
+	for k, v in sleeps.items():
+		if mk == "" or mv < v:
+			mk = k
+			mv = v
+	g = int(mk.split(":")[0])
+	cnt = int(mk.split(":")[1])
+	print(g, cnt)
+	return g * cnt
+
 print("Reading...")
 input = read()
-print(part1(input))
+print(part1(input))  # 48680
+print(part2(input))  # 94826
