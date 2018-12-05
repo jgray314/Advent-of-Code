@@ -51,6 +51,7 @@ def part2(input):
 	for c in LETTERS:
 		c_init = letter_strip(input, c)
 		letter_reacts[c] = len(fully_react(c_init))
+		print(c, " done")
 	print(letter_reacts)
 	min = len(input)
 	for k, v in letter_reacts.items():
