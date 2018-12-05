@@ -62,5 +62,5 @@ def part2(input):
 print("Reading...")
 input = read()
 print("Initial length: ", len(input))
-#print("Part 1: ", part1(input))  # 10766
-print("Part 2: ", part2(input))
+print("Part 1: ", part1(input))  # 10766
+print("Part 2: ", part2(input))  # 6538
