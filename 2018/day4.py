@@ -25,11 +25,14 @@ def hist_key(guard, minute):
 def key_guard(k):
 	return int(k.split(":")[0])
 
+def ts_min(ts):
+	return int(ts[-2:])
+
 def backfill_sleep(hist, guard, start, end):
-	#print(guard, start, end)
 	for i in range(start, end):
 		hist[hist_key(guard, i)] += 1
 
+# return {"guard:minute": count_of_sleeping}
 def guard_sleeps(input):
 	sleeps = defaultdict(int)
 	current_guard = -1
@@ -41,9 +44,9 @@ def guard_sleeps(input):
 			current_guard = val
 			sleep_start = 60
 		elif val == SLEEP:
-			sleep_start = int(key[-2:])  # key is minute
+			sleep_start = ts_min(key)  # key is minute
 		else:
-			backfill_sleep(sleeps, current_guard, sleep_start, int(key[-2:]))
+			backfill_sleep(sleeps, current_guard, sleep_start, ts_min(key))
 			sleep_start = 60
 	backfill_sleep(sleeps, current_guard, sleep_start, 60)
 	return sleeps
@@ -55,51 +58,41 @@ def sleeps_totals(sleeps):
 		totals[g] += v
 	return totals
 
-def part1(input):
-	sleeps = guard_sleeps(input)
-	totals = sleeps_totals(sleeps)
-	
+def laziest_guard(totals):
 	lazy_g = 0
 	for k, v in totals.items():
 		if lazy_g == 0 or totals[lazy_g] < v:
 			lazy_g = k
+	return lazy_g
 
-	minute = 60
-	max = 0
-	for k, v in sleeps.items():
-		s = k.split(":")
-		g = int(s[0])
-		m = int(s[1])
-		if g != lazy_g:
-			continue
-		#print(k, v, minute, max, lazy_g)
-		if minute == 60 or max < v:
-			minute = m
-			max = v
-	print(lazy_g, minute)
-	return lazy_g * minute
-
-def hist_sleep_odds(input):
-	sleeps = guard_sleeps(input)
-	guard_duty = defaultdict(int)
-	for k, v in input.items():
-		if type(v) is int:
-			guard_duty[v] += 1
-	print(guard_duty)
-	guard_odds = {}
-	for k, v in sleeps.items():
-		guard_odds[k] = v / guard_duty[key_guard(k)]
-	return guard_odds
-
-def part2(input):
-	sleeps = guard_sleeps(input)
-
+# Find laziest key matching guard
+# Guard = 0  means check across all guards
+def laziest(sleeps, guard):
 	mk = ""
 	mv = 0
 	for k, v in sleeps.items():
+		if guard != 0:
+			tg = int(k.split(":")[0])
+			if tg != guard:
+				continue;
 		if mk == "" or mv < v:
 			mk = k
 			mv = v
+	return mk
+
+def part1(input):
+	sleeps = guard_sleeps(input)
+	totals = sleeps_totals(sleeps)
+	
+	lazy_g = laziest_guard(totals)
+
+	key = laziest(sleeps, lazy_g)
+	minute = int(key.split(":")[1])
+	return lazy_g * minute
+
+def part2(input):
+	sleeps = guard_sleeps(input)
+	mk = laziest(sleeps, 0)
 	g = int(mk.split(":")[0])
 	cnt = int(mk.split(":")[1])
 	print(g, cnt)
