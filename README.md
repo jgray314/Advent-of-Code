@@ -1,5 +1,5 @@
 # Advent of Code
-Temporary place to hold results of playing around with 2018 AoC.
+Temporary place to hold results of playing around with various historic AoC.
 Using lightweight browser based IDE to verify.
 
 _Spoiler warning_
